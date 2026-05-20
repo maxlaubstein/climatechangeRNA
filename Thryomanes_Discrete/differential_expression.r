@@ -106,31 +106,6 @@ for(i in 1:length(tissues)){
   assign(paste0(tissues[i], "_volcano_plot"), volcanoplot)
   message(paste0("Volcano plot stored in '", paste0(tissues[i], "_volcano_plot","'")))
   
-  res <- res[order(res$padj, -abs(res$log2FoldChange)), ]
-  top_genes <- rownames(res)[1:50]
-  mat <- assay(vsd)[top_genes, ]
-  mat_scaled <- t(scale(t(mat)))
-  annotation_col <- as.data.frame(colData(vsd)[, "Treatment", drop = FALSE])
-  rownames(annotation_col) <- colnames(vsd)
-  ann_colors = list(Treatment = c(Heat = '#E63946', Control = '#74C0E3'))
-  palette <- colorRampPalette(c("#1A1A2E", "#30475E", "#FFE8B6", "#F2A365", "#C44536"))(100)
-  heatmap_plot <- pheatmap(mat_scaled,
-                           color = palette,
-                           annotation_col = annotation_col,
-                           annotation_colors = ann_colors,
-                           border_color = 'white',
-                           cluster_rows = TRUE,
-                           cluster_cols = TRUE,
-                           show_rownames = TRUE,
-                           show_colnames = TRUE,
-                           fontsize_row = 8,
-                           fontsize_col = 10,
-                           main = paste0("Figure ", i+1, "C. Top 50 DEGs in ", tools::toTitleCase(tissues[i])))
-  assign(paste0(tissues[i], "_heatmap"), heatmap_plot)
-  message(paste0("Heatmap plot stored in '", paste0(tissues[i], "_heatmap","'")))
-  
-  message("\n")
-  
   DEG_df <- subset(volcano, abs(volcano$log2FoldChange) >= 1 & volcano$padj <= 0.05)
   
   write.csv(DEG_df, file = paste0(tissues[i], "_sig_DEGs.csv"))
@@ -154,23 +129,18 @@ all_plots <- list(
   all_PCA = all_PCA_plot,
   heart_PCA = heart_PCA_plot,
   heart_volcano = heart_volcano_plot,
-  heart_heatmap = heart_heatmap,
   
   liver_PCA = liver_PCA_plot,
   liver_volcano = liver_volcano_plot,
-  liver_heatmap = liver_heatmap,
   
   muscle_PCA = muscle_PCA_plot,
   muscle_volcano = muscle_volcano_plot,
-  muscle_heatmap = muscle_heatmap,
   
   kidney_PCA = kidney_PCA_plot,
   kidney_volcano = kidney_volcano_plot,
-  kidney_heatmap = kidney_heatmap,
   
   brain_PCA = brain_PCA_plot,
   brain_volcano = brain_volcano_plot,
-  brain_heatmap = brain_heatmap
 )
 
 pdf("Thryomanes_Figures.pdf", width = 8.5, height = 11)
@@ -179,7 +149,6 @@ for (p in all_plots) {
   
   grid::grid.newpage()
   
-  # Define 8x6 inch viewport centered on page
   pushViewport(
     grid::viewport(
       width = unit(8, "in"),
