@@ -111,7 +111,7 @@ for(i in 1:length(tissues)){
   assign(paste0(tissues[i], "_volcano_plot"), volcanoplot)
   message(paste0("Volcano plot stored in '", paste0(tissues[i], "_volcano_plot","'")))
   
-  sig_DEG_df <- subset(volcano, abs(volcano$log2FoldChange) >= 1 & volcano$padj <= 0.05)
+  sig_DEG_df <- subset(volcano, abs(volcano$log2FoldChange) >= 1 & volcano$padj < 0.05)
   
   write.csv(sig_DEG_df, file = paste0(tissues[i], "_sig_DEGs.csv"))
   message(paste0("Significant DEGs file stored in '", paste0(tissues[i], "_sig_DEGs.csv","'")))
