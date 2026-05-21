@@ -229,7 +229,9 @@ summary_plot <- ggplot(summary_plot_df_long, aes(x = Tissue, y = Count, fill = U
   scale_fill_manual(NULL, values = c(nUP = "#E63946", nDOWN = "#74C0E3"),
                     labels = c(nUP = "Upregulated", nDOWN = "Downregulated"))+
   ylab("# Significant DEGs")+
-  theme_minimal()
+  theme_minimal()+
+  theme(legend.position = c(0.83, 0.9),
+      legend.background = element_rect(fill = "white", color = NA))
 
 ggsave("Summary_Plot.pdf", summary_plot, width = 6, height = 4, units = "in")
 
