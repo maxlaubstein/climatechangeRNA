@@ -51,7 +51,6 @@ all_PCA_plot <- ggplot(pca_df)+
   scale_color_manual("Treatment", values = c(Heat = "#E63946", Control = "#74C0E3"))+
   xlab(paste0("PC1 (", round(attr(pca_df, "percentVar")[1]*100, 2),"%)" ))+
   ylab(paste0("PC2 (", round(attr(pca_df, "percentVar")[2]*100, 2),"%)" ))+
-  scale_shape_manual("Tissue", values = 21:25)+
   theme_minimal()+
   ggtitle("Figure 1. PCA of Gene Expression Across Treatments and Tissues")
 
@@ -61,7 +60,7 @@ all_PCA_plot_fig <- ggplot(pca_df)+
   ylab(paste0("PC2 (", round(attr(pca_df, "percentVar")[2]*100, 2),"%)" ))+
   scale_fill_manual("Treatment", values = c(Heat = "#E63946", Control = "#74C0E3"))+
   scale_color_manual("Treatment", values = c(Heat = "#E63946", Control = "#74C0E3"))+
-  scale_shape_manual("Tissue", values = 21:25)+
+  scale_shape_manual("Tissue", values = 21:25, labels = function(x) tools::toTitleCase(tolower(x)))+
   theme_minimal()
 wrenpng <- ggdraw() + draw_image("wren.png", x = 0.4, y = 0.55, width = 0.45, height = 0.45)
 all_PCA_plot_fig <- ggdraw(all_PCA_plot_fig) + draw_plot(wrenpng)
