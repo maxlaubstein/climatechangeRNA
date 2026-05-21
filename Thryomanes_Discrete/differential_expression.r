@@ -5,6 +5,8 @@ library(dplyr)
 library(tximport)
 library(grid)
 library(tidyr)
+library(cowplot)
+library(magick)
 set.seed(16)
 setwd("/n/home00/mlaubstein/climatechangeRNA/Thryomanes_Discrete/")
 system("rm *sig_DEGs.csv")
@@ -61,6 +63,8 @@ all_PCA_plot_fig <- ggplot(pca_df)+
   scale_color_manual("Treatment", values = c(Heat = "#E63946", Control = "#74C0E3"))+
   scale_shape_manual("Tissue", values = 21:25)+
   theme_minimal()
+wrenpng <- ggdraw() + draw_image("wren.png", x = 0.4, y = 0.55, width = 0.45, height = 0.45)
+all_PCA_plot_fig <- ggdraw(all_PCA_plot_fig) + draw_plot(wrenpng)
 ggsave("BEWR_Specific_PCA_All_Tissues.pdf", all_PCA_plot_fig, width = 6, height = 4, units = "in")
 
 ####Treatment Effects Within Tissues
