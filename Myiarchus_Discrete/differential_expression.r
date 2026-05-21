@@ -5,6 +5,8 @@ library(dplyr)
 library(tximport)
 library(grid)
 library(tidyr)
+library(cowplot)
+library(magick)
 set.seed(16)
 setwd("/n/home00/mlaubstein/climatechangeRNA/Myiarchus_Discrete/")
 system("rm *sig_DEGs.csv")
@@ -49,7 +51,6 @@ all_PCA_plot <- ggplot(pca_df)+
   scale_color_manual("Treatment", values = c(Heat = "#E63946", Control = "#74C0E3"))+
   xlab(paste0("PC1 (", round(attr(pca_df, "percentVar")[1]*100, 2),"%)" ))+
   ylab(paste0("PC2 (", round(attr(pca_df, "percentVar")[2]*100, 2),"%)" ))+
-  scale_shape_manual("Tissue", values = 21:25)+
   theme_minimal()+
   ggtitle("Figure 1. PCA of Gene Expression Across Treatments and Tissues")
 
@@ -59,8 +60,10 @@ all_PCA_plot_fig <- ggplot(pca_df)+
   ylab(paste0("PC2 (", round(attr(pca_df, "percentVar")[2]*100, 2),"%)" ))+
   scale_fill_manual("Treatment", values = c(Heat = "#E63946", Control = "#74C0E3"))+
   scale_color_manual("Treatment", values = c(Heat = "#E63946", Control = "#74C0E3"))+
-  scale_shape_manual("Tissue", values = 21:25)+
+  scale_shape_manual("Tissue", values = 21:25, labels = function(x) tools::toTitleCase(tolower(x)))+
   theme_minimal()
+flycatcherpng <- ggdraw() + draw_image("flycatcher.png", x = 0.4, y = 0.4, width = 0.55, height = 0.55)
+all_PCA_plot_fig <- ggdraw(all_PCA_plot_fig) + draw_plot(flycatcherpng)
 ggsave("ATFL_Specific_PCA_All_Tissues.pdf", all_PCA_plot_fig, width = 6, height = 4, units = "in")
 
 ####Treatment Effects Within Tissues
@@ -247,4 +250,3 @@ brain_genes$tissue <- "brain"
 
 combined_output <- rbind(heart_genes, liver_genes, muscle_genes, kidney_genes, brain_genes)
 write.csv(combined_output, file = "combined_output_Myiarchus.csv")
-
