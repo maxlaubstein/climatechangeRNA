@@ -201,7 +201,11 @@ ggsave("Combined_Muscle_Volcano.pdf", muscle_volcano_plot_fig, width = 6, height
 kidney_volcano_plot_fig <- kidney_volcano_plot + ggtitle(NULL)
 ggsave("Combined_Kidney_Volcano.pdf", kidney_volcano_plot_fig, width = 6, height = 4, units = "in")
 
-
+for(tissue in c("heart", "liver", "muscle", "kidney", "brain")){
+  BEWR <- read.csv("~/climatechangeRNA/Thryomanes_Discrete/heart_sig_DEGs.csv")$gene
+  ATFL <- read.csv("~/climatechangeRNA/Myiarchus_Discrete/heart_sig_DEGs.csv")$gene
+  message(paste0("# of Shared DEGs in ",tissue, " = ", length(intersect(BEWR, ATFL))))
+}
 
 
 
