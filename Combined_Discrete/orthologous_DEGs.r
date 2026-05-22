@@ -11,6 +11,7 @@ library(stringr)
 setwd("~/climatechangeRNA/Combined_Discrete/")
 
 system("rm *sig_DEGs.csv")
+system("rm *all_genes.csv")
 system("rm *pdf")
 
 load("/n/holylfs06/LABS/edwards_lab/Lab/maxlaubstein/climatechangeRNA/Thryomanes_output/kallisto/deseq2_qc/deseq2.dds.RData")
@@ -64,7 +65,7 @@ all_PCA_plot_fig <- ggplot(pca_df)+
   geom_point(aes(x = PC1, y = PC2, shape = Tissue, fill = Species, color = Species), size = 3, stroke = 1)+
   scale_fill_manual("Species", values = c(`Thryomanes bewickii` = "#8B5A2B", `Myiarchus cinerascens` = "#E1C85A"))+
   scale_color_manual("Species", values = c(`Thryomanes bewickii` = "#5B3A1C", `Myiarchus cinerascens` = "#7F7F7F"))+
-  scale_shape_manual("Tissue", values = 21:25)+
+  scale_shape_manual("Tissue", values = 21:25, labels = function(x) tools::toTitleCase(tolower(x)))+
   xlab(paste0("PC1 (", round(attr(pca_df, "percentVar")[1]*100, 2),"%)" ))+
   ylab(paste0("PC2 (", round(attr(pca_df, "percentVar")[2]*100, 2),"%)" ))+
   theme_minimal()
