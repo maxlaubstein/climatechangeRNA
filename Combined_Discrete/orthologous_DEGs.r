@@ -65,6 +65,8 @@ all_PCA_plot_fig <- ggplot(pca_df)+
   scale_fill_manual("Species", values = c(`Thryomanes bewickii` = "#8B5A2B", `Myiarchus cinerascens` = "#E1C85A"))+
   scale_color_manual("Species", values = c(`Thryomanes bewickii` = "#5B3A1C", `Myiarchus cinerascens` = "#7F7F7F"))+
   scale_shape_manual("Tissue", values = 21:25)+
+  xlab(paste0("PC1 (", round(attr(pca_df, "percentVar")[1]*100, 2),"%)" ))+
+  ylab(paste0("PC2 (", round(attr(pca_df, "percentVar")[2]*100, 2),"%)" ))+
   theme_minimal()
 ggsave("Cross_Species_PCA_All_Tissues.pdf", all_PCA_plot_fig, width = 6, height = 4, units = "in")
 
@@ -88,12 +90,14 @@ for(i in 1:length(tissues)){
   res <- results(dds, contrast = list("Treatment_Heat_vs_Control"), alpha = 0.05)
   vsd <- vst(dds, blind = FALSE)
   
-  pca_df <- DESeq2::plotPCA(vsd, intgroup=c("Treatment"), returnData = TRUE)
+  pca_df <- DESeq2::plotPCA(vsd, intgroup=c("Treatment", "Species"), returnData = TRUE)
   pcaplot <- ggplot(pca_df)+
-    geom_point(aes(x = PC1, y = PC2, color = Treatment), size = 3)+
+    geom_point(aes(x = PC1, y = PC2, color = Treatment, shape = Species), size = 3)+
     scale_color_manual("Treatment", values = c("#E63946", "#74C0E3"))+
     theme_minimal()+
-    ggtitle(paste0("Figure ", i+1, "A. PCA of Gene Expression in ", tools::toTitleCase(tissues[i]), " In Both Species Across Treatments"))
+    ggtitle(paste0("Figure ", i+1, "A. PCA of Gene Expression in ", tools::toTitleCase(tissues[i]), " In Both Species Across Treatments"))+
+    xlab(paste0("PC1 (", round(attr(pca_df, "percentVar")[1]*100, 2),"%)" ))+
+    ylab(paste0("PC2 (", round(attr(pca_df, "percentVar")[2]*100, 2),"%)" ))
   assign(paste0(tissues[i], "_PCA_plot"), pcaplot)
   message(paste0("PCA plot stored in '", paste0(tissues[i], "_Combined_PCA_plot","'")))
   
